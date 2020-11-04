@@ -8,6 +8,7 @@ import Users from './components/users/Users'
 import About from './components/layouts/About'
 import Login from './components/auth/Login'
 import NotFound from './components/layouts/NotFound'
+import UserItem from './components/users/UserItem'
 import axios from 'axios'
 import './App.css';
 
@@ -17,6 +18,7 @@ import './App.css';
 /*
  todo ENDPOINT : https://api.gihtub.com
  todo Search Endpoint : https://api.github.com/search/users?q=query
+ todo Get repos by username https://api.github.com/users/:username/repos
 */
 
 
@@ -80,7 +82,10 @@ class  App extends Component {
 
           <Route exact path="/about"  render={props => ( <About />)} />
           <Route exact path="/login"  render={props => ( <Login />)} />
+          <Route exact path="/user/:username"  render={props => (<UserItem  { ...props } />)}/>
+
           <Route exact path="*" render={props => (<NotFound />)} />
+
       </Switch>
     </Fragment>
   </BrowserRouter>

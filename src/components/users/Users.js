@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 const User = ({ user: { avatar_url, login } }) => {
   return (
@@ -17,7 +18,9 @@ const User = ({ user: { avatar_url, login } }) => {
         <div class="card-body">
           <h4 class="card-title">{login}</h4>
           <hr />
-          <button className="btn btn-block btn-primary">More</button>
+          <Link to={`/user/${login}`} className="btn btn-block btn-primary">
+            More
+          </Link>
         </div>
       </div>
     </div>
