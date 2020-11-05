@@ -33,7 +33,7 @@ export class Users extends Component {
       <div className="container">
         <div className="row">
           {this.props.users.map((user) => (
-            <User user={user} />
+            <User key={user.id} user={user} />
           ))}
         </div>
       </div>

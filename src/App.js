@@ -45,7 +45,9 @@ class  App extends Component {
 
   state = {
     
-    users:[]
+    users:[],
+    repos:[],
+    loading: false
 
   }
 
@@ -62,34 +64,54 @@ class  App extends Component {
       this.setState({ users: data.items})
   }
 
+
+  getRepos = async(username) => {
+    this.setState({ loading:true})
+    const response  = await axios.get(`https://api.github.com/users/${username}/repos`)
+    this.setState({ repos: response.data, loading: false})
+
+  }
+
   render() {
   return (
-<BrowserRouter>
-    <Fragment>
-      <Navbar />
+    <BrowserRouter>
+      <Fragment>
+      
+        <Navbar />
 
-      <Switch>
-          <Route exact path="/" render={props => (
-            <Fragment>
-             <div className="container">
-              <Search buttonname={"search"}   
-              searchUsers={this.searchUsers.bind(this)} />
-              </div>
-              <Users  users={this.state.users}/>
-            </Fragment>
-          )}  />
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={(props) => (
+              <Fragment>
+                <div className="container">
+                  <Search
+                    buttonname={'search'}
+                    searchUsers={this.searchUsers.bind(this)}
+                  />
+                </div>
+                <Users users={this.state.users} />
+              </Fragment>
+            )}
+          />
 
+          <Route exact path="/about" render={(props) => <About />} />
+          <Route exact path="/login" render={(props) => <Login />} />
+          <Route
+            exact
+            path="/user/:username"
+            render={(props) => <UserItem {...props} 
+              repos={this.state.repos}
+              getReposUserItem={this.getRepos} 
+              loading={this.state.loading}
+            />}
+          />
 
-          <Route exact path="/about"  render={props => ( <About />)} />
-          <Route exact path="/login"  render={props => ( <Login />)} />
-          <Route exact path="/user/:username"  render={props => (<UserItem  { ...props } />)}/>
-
-          <Route exact path="*" render={props => (<NotFound />)} />
-
-      </Switch>
-    </Fragment>
-  </BrowserRouter>
-    
+          <Route exact path="*" render={(props) => <NotFound />} />
+        </Switch>
+      </Fragment>
+    </BrowserRouter>
   );
 }
 }
