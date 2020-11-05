@@ -9,6 +9,7 @@ import About from './components/layouts/About'
 import Login from './components/auth/Login'
 import NotFound from './components/layouts/NotFound'
 import UserItem from './components/users/UserItem'
+import Profile from './components/users/Profile'
 import axios from 'axios'
 import './App.css';
 
@@ -19,6 +20,7 @@ import './App.css';
  todo ENDPOINT : https://api.gihtub.com
  todo Search Endpoint : https://api.github.com/search/users?q=query
  todo Get repos by username https://api.github.com/users/:username/repos
+ todo Get Profile by username https://api.github.com/users/:username
 */
 
 
@@ -47,7 +49,8 @@ class  App extends Component {
     
     users:[],
     repos:[],
-    loading: false
+    loading: false,
+    error:null
 
   }
 
@@ -66,9 +69,18 @@ class  App extends Component {
 
 
   getRepos = async(username) => {
-    this.setState({ loading:true})
-    const response  = await axios.get(`https://api.github.com/users/${username}/repos`)
-    this.setState({ repos: response.data, loading: false})
+    
+    try {
+      this.setState({ loading:true})
+      const response  = await axios.get(`https://api.github.com/users/${username}/repos`)
+      this.setState({ repos: response.data, loading: false})
+      
+    } catch (error) {
+      console.log(error.response.data);
+      this.setState({ error:error.response.data.message})
+    }
+
+
 
   }
 
@@ -96,8 +108,8 @@ class  App extends Component {
             )}
           />
 
-          <Route exact path="/about" render={(props) => <About />} />
-          <Route exact path="/login" render={(props) => <Login />} />
+          <Route exact path="/about" component={About} />
+          <Route exact path="/login" component={Login} />
           <Route
             exact
             path="/user/:username"
@@ -105,8 +117,11 @@ class  App extends Component {
               repos={this.state.repos}
               getReposUserItem={this.getRepos} 
               loading={this.state.loading}
+              error={this.state.error}
             />}
           />
+
+          <Route exact path="/user/profile/:username" compnent={Profile}/>
 
           <Route exact path="*" render={(props) => <NotFound />} />
         </Switch>

@@ -19,7 +19,10 @@ const User = ({ user: { avatar_url, login } }) => {
           <h4 class="card-title">{login}</h4>
           <hr />
           <Link to={`/user/${login}`} className="btn btn-block btn-primary">
-            More
+            get repos
+          </Link>
+          <Link to={`/user/${login}`} className="btn btn-block btn-indigo mt-1">
+            profile
           </Link>
         </div>
       </div>

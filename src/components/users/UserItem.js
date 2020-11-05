@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Spinner from './../layouts/Spinner';
+import Alert from './../layouts/Alert';
 export class UserItem extends Component {
   componentDidMount() {
     console.log("Fire ")
@@ -8,11 +9,16 @@ export class UserItem extends Component {
 
   render() {
     console.log(this.props)
-    const { repos , loading} = this.props
+    const { repos , loading, error} = this.props
     // console.log(this.props.prams.match.username);
+
+    if(error) {
+        return <Alert message={error}  typeError={'danger'} />
+    }
     if(loading) {
       return <Spinner />
     }
+
     
     return (
       <div className="container mt-5">
