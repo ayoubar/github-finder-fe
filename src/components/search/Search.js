@@ -1,42 +1,45 @@
-import React, { Component } from 'react';
+import React, { Component, useContext,useState } from 'react';
+import UserContext from './../../context/users/UserContext'
 
-class Search extends Component {
-  state = {
-    textInput: '',
+const Search  = () => {
+
+  const userContext = useContext(UserContext)
+  const { searchUsers } = userContext
+
+  const [textInput, setTextInput] = useState('')
+ const  handleChange = (e) => {
+  setTextInput(e.target.value);
   };
 
-  handleChange = (e) => {
-    this.setState({ textInput: e.target.value });
-  };
-
-  handleClick = () => {
+  const handleClick = () => {
     alert('WOOO');
   };
 
-  submitForm = (e) => {
+ const  submitForm = (e) => {
     e.preventDefault();
-    this.props.searchUsers(this.state.textInput);
-    this.setState({ textInput: '' });
+    // this.props.searchUsers(this.state.textInput);
+    searchUsers(textInput)
+    setTextInput(textInput);
   };
 
-  StopClickDroite = (e) => {
+  const StopClickDroite = (e) => {
     e.preventDefault();
   };
 
-  render() {
+ 
     return (
       <>
         <form
           class="text-center p-5"
-          onSubmit={this.submitForm}
-          onContextMenu={this.StopClickDroite}
+          onSubmit={submitForm}
+          onContextMenu={StopClickDroite}
         >
           <input
             type="text"
             id="defaultSubscriptionFormPassword"
             class="form-control mb-4 border-dark"
             placeholder="Search..."
-            onChange={this.handleChange}
+            onChange={handleChange}
           />
 
           <button
@@ -44,12 +47,12 @@ class Search extends Component {
             className="btn btn-dark btn-block"
             // onClick={() => alert('HELLO')}
           >
-            {this.props.buttonname}
+            Search
           </button>
         </form>
       </>
     );
   }
-}
+
 
 export default Search;

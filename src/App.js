@@ -10,9 +10,12 @@ import Login from './components/auth/Login'
 import NotFound from './components/layouts/NotFound'
 import UserItem from './components/users/UserItem'
 import Profile from './components/users/Profile'
+import ReducerComonent from './components/ReducerComonent';
 import axios from 'axios'
 import './App.css';
 
+
+import UserListProvider from './context/users/userState';
 
 
 
@@ -61,12 +64,6 @@ class  App extends Component {
    }
 
    //reda
-  searchUsers = async  (text) => {
-      const response = await axios.get(`https://api.github.com/search/users?q=${text}`)
-      const data = await response.data
-      this.setState({ users: data.items})
-  }
-
 
   getRepos = async(username) => {
     
@@ -88,7 +85,6 @@ class  App extends Component {
   return (
     <BrowserRouter>
       <Fragment>
-      
         <Navbar />
 
         <Switch>
@@ -96,15 +92,12 @@ class  App extends Component {
             exact
             path="/"
             render={(props) => (
-              <Fragment>
-                <div className="container">
-                  <Search
-                    buttonname={'search'}
-                    searchUsers={this.searchUsers.bind(this)}
-                  />
-                </div>
-                <Users users={this.state.users} />
-              </Fragment>
+                <UserListProvider>
+                  <div className="container">
+                    <Search       />
+                    <Users />
+                  </div>
+                </UserListProvider>
             )}
           />
 
@@ -113,16 +106,19 @@ class  App extends Component {
           <Route
             exact
             path="/user/:username"
-            render={(props) => <UserItem {...props} 
-              repos={this.state.repos}
-              getReposUserItem={this.getRepos} 
-              loading={this.state.loading}
-              error={this.state.error}
-            />}
+            render={(props) => (
+              <UserItem
+                {...props}
+                repos={this.state.repos}
+                getReposUserItem={this.getRepos}
+                loading={this.state.loading}
+                error={this.state.error}
+              />
+            )}
           />
 
-          <Route exact path="/user/profile/:username" compnent={Profile}/>
-
+          <Route exact path="/user/profile/:username" compnent={Profile} />
+          <Route exact path ='/reducer' component={ReducerComonent} /> 
           <Route exact path="*" render={(props) => <NotFound />} />
         </Switch>
       </Fragment>

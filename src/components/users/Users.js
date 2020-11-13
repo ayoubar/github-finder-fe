@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import UserContext from './../../context/users/UserContext';
 
+// component based class ====> component based  functions
 const User = ({ user: { avatar_url, login } }) => {
   return (
     <div className="col-md-3 mb-3">
@@ -30,18 +32,20 @@ const User = ({ user: { avatar_url, login } }) => {
   );
 };
 
-export class Users extends Component {
-  render() {
-    return (
-      <div className="container">
-        <div className="row">
-          {this.props.users.map((user) => (
-            <User key={user.id} user={user} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-}
+// props drilling 
+
+ const Users = () =>  {
+   const userContext = useContext(UserContext);
+   const { users } = userContext;
+   return (
+     <div className="container">
+       <div className="row">
+         {users.map((user) => (
+           <User key={user.id} user={user} />
+         ))}
+       </div>
+     </div>
+   );
+ }
 
 export default Users;
